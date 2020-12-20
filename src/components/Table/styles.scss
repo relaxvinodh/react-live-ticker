@@ -1,0 +1,93 @@
+.tableContainer {
+  display: flex;
+  flex-wrap: wrap;
+
+  .table {
+    position: relative;
+    width: 100%;
+    min-width: 250px;
+    display: flex;
+    flex: 1 0 0;
+    flex-direction: column;
+    font-size: 8pt;
+    align-items: stretch;
+
+    &.bids {
+      svg {
+        transform: scale(-1, 1);
+      }
+      @media screen and (max-width: 520px) {
+        svg {
+          transform: rotate(180deg);
+        }
+        .tableBody{
+          display: flex;
+          flex-direction: column;
+          flex-flow: column-reverse;
+        }
+      }
+    }
+    &.asks {
+      .tableRow {
+        flex-flow: row-reverse;
+      }
+      @media screen and (max-width: 520px) {
+        svg {
+          transform: scale(-1, 1);
+        }
+        .tableRow {
+          flex-direction: unset;
+        }
+        .tableHeader {
+          height: 0;
+          overflow: hidden;
+          width: 100%;
+          border: 1px solid #2c3940;
+          margin: 7px 0 10px;
+        }
+      }
+    }
+
+    .tableHeader {
+      color: #8a8f93;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    .tableBody {
+      font-size: 7pt;
+      position: relative;
+      .tableField {
+        .tableLabel {
+          display: none;
+        }
+      }
+      .tableRow{
+        padding: 3px 0;
+        margin: 0 5px;
+        cursor: pointer;
+      }
+      .tableRow:hover {
+        background: #969b9e1f;
+      }
+    }
+
+    .tableRow {
+      display: flex;
+      flex: 1 0 0;
+      overflow: hidden;
+    }
+
+    .tableField {
+      display: flex;
+      flex: var(--ratio, 1) 0 0;
+      justify-content: center;
+    }
+
+    .tableLabel {
+      text-align: center;
+    }
+
+  }
+  
+}
