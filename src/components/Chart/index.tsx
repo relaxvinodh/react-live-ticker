@@ -19,14 +19,13 @@ React.SVGProps<SVGRectElement> & {
 const Chart: React.FC<ChartProps> = React.memo(({ type }) => {
   const books = useContext(BooksContext);
   const { totals, totalMax } = books![type];
-  const items = R.values(totals);
+
   const sortedItems = useMemo(() => {
-    console.log({ items });
     if (type === 'bids') {
-      return R.sort(R.ascend(R.prop('total')), items);
+      return R.sort(R.ascend(R.prop('total')), R.values(totals));
     }
-    return items;
-  }, [items]);
+    return R.values(totals);
+  }, [totals, type]);
   return (
     <div className="chart container">
       <svg className={type}>

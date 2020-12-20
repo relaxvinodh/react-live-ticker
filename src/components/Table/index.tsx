@@ -1,9 +1,7 @@
-/* eslint-disable no-console */
 import * as R from 'ramda';
 import React, { useContext, useMemo } from 'react';
 import BooksContext from '../../context';
 import Chart from '../Chart';
-import { ItemTotal, StateType } from '../reducer/types';
 import './styles.scss';
 import TableBody from './TableBody';
 import TableField from './TableField';
@@ -11,7 +9,7 @@ import TableHeader from './TableHeader';
 import TableLabel from './TableLabel';
 import TableRow from './TableRow';
 
-const Row = React.memo(({ item, total }: {item?: any, total?: number}) => (
+export const Row = React.memo(({ item, total }: {item?: any, total?: number}) => (
   <TableRow>
     <TableField>
       <TableLabel>Count</TableLabel>
@@ -37,13 +35,13 @@ const TableItem:React.FC<React.HTMLAttributes<HTMLDivElement> & { type: 'asks' |
 ) => {
   const books = useContext(BooksContext);
   const { data, totals } = books![type];
-  const items = R.values(data);
+
   const sortedItems = useMemo(() => {
     if (type === 'bids') {
-      return R.sort(R.descend(R.prop('price')), items);
+      return R.sort(R.descend(R.prop('price')), R.values(data));
     }
-    return items;
-  }, [items]);
+    return R.values(data);
+  }, [data, type]);
   return (
     <div className={`table ${type ?? ''}`} {...otherProps}>
       <TableHeader>
@@ -51,25 +49,13 @@ const TableItem:React.FC<React.HTMLAttributes<HTMLDivElement> & { type: 'asks' |
       </TableHeader>
       <TableBody>
         <Chart type={type} />
-        {sortedItems.map((item, idx) => {
-          console.log({ item, totals });
-          return (
-            <Row item={item} key={`${type}-${idx}`} total={totals[item.price].total} />
-          );
-        })}
+        {sortedItems.map((item, idx) => (
+          <Row item={item} key={`${type}-${idx}`} total={totals[item.price].total} />
+        ))}
       </TableBody>
     </div>
   );
 });
-
-export const initialState: StateType = {
-  asks: {
-    data: {}, priceSnap: [], totals: {} as ItemTotal, totalMax: 0,
-  },
-  bids: {
-    data: {}, priceSnap: [], totals: {} as ItemTotal, totalMax: 0,
-  },
-};
 
 const Tables: React.FC = () => (
   <div className="tableContainer">

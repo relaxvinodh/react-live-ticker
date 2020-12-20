@@ -1,9 +1,20 @@
 import * as R from 'ramda';
 import ACTIONS from './actions';
-import { IndexedItemType, StateType, Totals } from './types';
+import {
+  IndexedItemType, ItemTotal, StateType, Totals,
+} from './types';
 import {
   accumalateTotal, getData, getItemTotalMax, mapRec,
 } from './utils';
+
+export const initialState: StateType = {
+  asks: {
+    data: {}, priceSnap: [], totals: {} as ItemTotal, totalMax: 0,
+  },
+  bids: {
+    data: {}, priceSnap: [], totals: {} as ItemTotal, totalMax: 0,
+  },
+};
 
 const dataReducer = <T extends Array<number>>(
   state: StateType, [type, payload]: [string, T[] | T],

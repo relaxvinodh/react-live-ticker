@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 /* eslint-disable no-param-reassign */
 import * as R from 'ramda';
 import {
@@ -23,7 +22,6 @@ export const accumalateTotal = (priceSnapshot: number[], data: SideType['data'])
   if (hash[curr] === undefined) {
     hash[curr] = {} as ItemTotal;
   }
-  console.log({ data, curr });
 
   const { amount } = data[curr];
   const { total: previousTotal = 0 } = hash[srcArray[idx - 1]] || {};

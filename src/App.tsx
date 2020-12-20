@@ -1,23 +1,18 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useCallback, useEffect, useReducer } from 'react';
+import './App.scss';
 import Header from './components/Header';
-import dataReducer from './components/reducer';
+import dataReducer, { initialState } from './components/reducer';
 import ACTIONS from './components/reducer/actions';
-import { ItemTotal, StateType } from './components/reducer/types';
 import Tables from './components/Table';
 import BooksContext from './context';
-import './App.scss';
-
-export const initialState: StateType = {
-  asks: {
-    data: {}, priceSnap: [], totals: {} as ItemTotal, totalMax: 0,
-  },
-  bids: {
-    data: {}, priceSnap: [], totals: {} as ItemTotal, totalMax: 0,
-  },
-};
 
 const App = () => {
-  const [state, dispatch] = useReducer(dataReducer, initialState);
+  const booksStore = localStorage.getItem('booksStore');
+  const [state, dispatch] = useReducer(
+    dataReducer, booksStore ? JSON.parse(booksStore) : initialState,
+  );
+
+  const saveStore = useCallback(() => localStorage.setItem('booksStore', JSON.stringify(state)), [state]);
 
   useEffect(() => {
     const ws = new WebSocket('wss://api-pub.bitfinex.com/ws/2');
@@ -42,8 +37,12 @@ const App = () => {
         }
       }
     };
+    setTimeout(() => ws.close(), 5000);
+
+    window.addEventListener('unload', saveStore, false);
     return () => {
       try {
+        window.removeEventListener('unload', saveStore, false);
         ws.close();
       } catch (e) {
         // eslint-disable-next-line no-console
@@ -51,6 +50,7 @@ const App = () => {
       }
     };
   }, []);
+
   return (
     <div className="App">
       <Header />
