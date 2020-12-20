@@ -37,7 +37,6 @@ const App = () => {
         }
       }
     };
-    setTimeout(() => ws.close(), 5000);
 
     window.addEventListener('unload', saveStore, false);
     return () => {
