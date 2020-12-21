@@ -1,6 +1,7 @@
 import * as R from 'ramda';
 import React, { useContext, useMemo } from 'react';
 import BooksContext from '../../context';
+import BusyBox from '../BusyBox';
 import Chart from '../Chart';
 import './styles.scss';
 import TableBody from './TableBody';
@@ -47,10 +48,21 @@ const TableItem:React.FC<React.HTMLAttributes<HTMLDivElement> & { type: 'asks' |
           <Row />
         </TableHeader>
         <TableBody>
-          <Chart type={type} />
-          {sortedItems.map((item, idx) => (
-            <Row item={item} key={`${type}-${idx}`} total={totals[item.price]?.total} />
-          ))}
+          {books?.loading
+            ? (
+              <>
+                <BusyBox />
+                Loading ...
+              </>
+            )
+            : (
+              <>
+                <Chart type={type} />
+                {sortedItems.map((item, idx) => (
+                  <Row item={item} key={`${type}-${idx}`} total={totals[item.price]?.total} />
+                ))}
+              </>
+            )}
         </TableBody>
       </div>
     );

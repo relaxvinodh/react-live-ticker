@@ -14,15 +14,32 @@ export const initialState: StateType = {
   bids: {
     data: {}, priceSnap: [], totals: {} as ItemTotal, totalMax: 0,
   },
+  loading: false,
+  error: null,
 };
 
 const dataReducer = <T extends Array<number>>(
-  state: StateType, [type, payload]: [string, T[] | T],
+  state: StateType, [type, payload]: [string, T[] | T | undefined],
 ) => {
   const {
     INITIAL, UPDATE_ASKS, DELETE_ASKS, UPDATE_BIDS, DELETE_BIDS,
+    REQUEST_STARTED, REQUEST_SUCCESS,
   } = ACTIONS;
   switch (type) {
+    case REQUEST_STARTED: {
+      return {
+        ...state,
+        loading: true,
+        error: null,
+      };
+    }
+    case REQUEST_SUCCESS: {
+      return {
+        ...state,
+        loading: false,
+        error: null,
+      };
+    }
     case INITIAL: {
       const stateWithData = getData(payload as T[], state);
       const asksTotals = accumalateTotal(state.asks.priceSnap, state.asks.data);

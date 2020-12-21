@@ -15,6 +15,7 @@ const useWebSocket = () => {
     const ws = new WebSocket('wss://api-pub.bitfinex.com/ws/2');
     let i = 0;
     ws.onopen = () => {
+      dispatch([ACTIONS.REQUEST_STARTED, undefined]);
       ws.send(JSON.stringify({
         event: 'subscribe',
         channel: 'book',
@@ -25,6 +26,7 @@ const useWebSocket = () => {
       const msg = JSON.parse(data);
       if (msg.event) return;
       if (msg[1] && msg[1][0] && Array.isArray(msg[1][0])) {
+        dispatch([ACTIONS.REQUEST_SUCCESS, undefined]);
         dispatch([ACTIONS.INITIAL, msg[1]]);
       } else {
         const [, count, amount] = msg[1];

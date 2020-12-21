@@ -27,4 +27,6 @@ export type SideType = {
 export type StateType = {
   asks: SideType,
   bids: SideType,
+  loading: boolean,
+  error: any,
 };
