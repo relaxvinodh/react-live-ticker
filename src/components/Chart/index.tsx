@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import * as R from 'ramda';
 import React, { useContext, useMemo } from 'react';
 import BooksContext from '../../context';
@@ -7,6 +6,16 @@ import './chart.scss';
 type ChartProps = {
   type: 'asks' | 'bids',
 };
+
+/**
+ * rect Component
+ *
+ * sets the width based on the value and totalMax passed
+ *
+ * @param value number
+ * @param totalMax number
+ *
+ */
 
 const Rect: React.FC<
 React.SVGProps<SVGRectElement> & {
