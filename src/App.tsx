@@ -16,6 +16,7 @@ const App = () => {
 
   useEffect(() => {
     const ws = new WebSocket('wss://api-pub.bitfinex.com/ws/2');
+    let i = 0;
     ws.onopen = () => {
       ws.send(JSON.stringify({
         event: 'subscribe',
@@ -30,10 +31,15 @@ const App = () => {
         dispatch([ACTIONS.INITIAL, msg[1]]);
       } else {
         const [, count, amount] = msg[1];
+        i += 1;
         if (count > 0) {
-          dispatch([amount > 0 ? ACTIONS.UPDATE_BIDS : ACTIONS.UPDATE_ASKS, msg[1]]);
+          setTimeout(() => {
+            dispatch([amount > 0 ? ACTIONS.UPDATE_BIDS : ACTIONS.UPDATE_ASKS, msg[1]]);
+          }, i * 100);
         } else {
-          dispatch([amount > 0 ? ACTIONS.DELETE_BIDS : ACTIONS.DELETE_ASKS, msg[1]]);
+          setTimeout(() => {
+            dispatch([amount > 0 ? ACTIONS.DELETE_BIDS : ACTIONS.DELETE_ASKS, msg[1]]);
+          }, i * 100);
         }
       }
     };

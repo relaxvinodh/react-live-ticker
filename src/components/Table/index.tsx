@@ -30,32 +30,32 @@ export const Row = React.memo(({ item, total }: {item?: any, total?: number}) =>
   </TableRow>
 ));
 
-const TableItem:React.FC<React.HTMLAttributes<HTMLDivElement> & { type: 'asks' | 'bids'}> = React.memo((
-  { type, ...otherProps },
-) => {
-  const books = useContext(BooksContext);
-  const { data, totals } = books![type];
+const TableItem:React.FC<React.HTMLAttributes<HTMLDivElement> & { type: 'asks' | 'bids'}> = React.memo(
+  ({ type, ...otherProps }) => {
+    const books = useContext(BooksContext);
+    const { data, totals } = books![type];
 
-  const sortedItems = useMemo(() => {
-    if (type === 'bids') {
-      return R.sort(R.descend(R.prop('price')), R.values(data));
-    }
-    return R.values(data);
-  }, [data, type]);
-  return (
-    <div className={`table ${type ?? ''}`} {...otherProps}>
-      <TableHeader>
-        <Row />
-      </TableHeader>
-      <TableBody>
-        <Chart type={type} />
-        {sortedItems.map((item, idx) => (
-          <Row item={item} key={`${type}-${idx}`} total={totals[item.price].total} />
-        ))}
-      </TableBody>
-    </div>
-  );
-});
+    const sortedItems = useMemo(() => {
+      if (type === 'bids') {
+        return R.sort(R.descend(R.prop('price')), R.values(data));
+      }
+      return R.values(data);
+    }, [data, type]);
+    return (
+      <div className={`table ${type ?? ''}`} {...otherProps}>
+        <TableHeader>
+          <Row />
+        </TableHeader>
+        <TableBody>
+          <Chart type={type} />
+          {sortedItems.map((item, idx) => (
+            <Row item={item} key={`${type}-${idx}`} total={totals[item.price]?.total} />
+          ))}
+        </TableBody>
+      </div>
+    );
+  },
+);
 
 const Tables: React.FC = () => (
   <div className="tableContainer">
