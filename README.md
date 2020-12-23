@@ -1,6 +1,6 @@
 # Live Ticker - React, Typescript
 
-Hacker News Assignment is created with `CRA`
+React Live Ticker is created with `CRA`
 
 ## State Management - Not actually using store, instead using Context API
 
